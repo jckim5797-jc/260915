@@ -1,9 +1,21 @@
-# Dual-AI Review Pipeline
+# Dual-AI Review Pipeline (API-based, headless)
 
-Claude (main) drafts an answer, ChatGPT (sub) verifies it and returns a
-PASS/FAIL verdict with concrete issues, and Claude revises until ChatGPT
-passes it or the round limit is hit. Pure Python standard library --
-nothing to `pip install`.
+**If you just want Claude and ChatGPT reviewing each other's work using
+subscriptions you already pay for, use the setup at the repo root
+(`../README.md`, `../CLAUDE.md`, `../AGENTS.md` -- Claude Code + Codex CLI
+sharing a folder) instead of this.** That's simpler, has no per-token
+billing, and is what most people want.
+
+This folder is for a different, narrower case: a **fully unattended,
+headless** review loop -- e.g. running in CI, on a server with no
+interactive terminal, or as a one-shot scripted check -- where you're
+fine paying per-token API rates on both accounts in exchange for not
+needing an interactive Claude Code / Codex CLI session at all.
+
+Claude drafts an answer, ChatGPT verifies it and returns a PASS/FAIL
+verdict with concrete issues, and Claude revises until ChatGPT passes it
+or the round limit is hit. Pure Python standard library -- nothing to
+`pip install`.
 
 ## Setup
 
@@ -14,7 +26,7 @@ nothing to `pip install`.
    ```
    cp dual-ai-review/.env.example dual-ai-review/.env
    ```
-3. Requires Python 3.8+. No other dependencies.
+3. Requires Python 3.8+. No other dependencies (standard library only).
 
 ## Usage
 
@@ -52,10 +64,8 @@ otherwise, so you can use it in scripts/CI (`&& echo ok || echo needs work`).
 
 ## Notes
 
-- This calls the two vendor APIs directly (not through any Claude Code or
-  ChatGPT app session), so it works standalone from your terminal.
-- Each run costs API credits on both accounts -- roughly
-  `rounds x 2` API calls.
+- Each run costs API credits on both accounts -- roughly `rounds x 2` API
+  calls.
 - The reviewer prompt asks for JSON only; if a model still wraps it in
   prose, the script falls back to extracting the first `{...}` block. If
   that also fails, the verdict is marked `UNKNOWN` so you don't silently

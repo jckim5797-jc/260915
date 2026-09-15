@@ -6,10 +6,7 @@ already pay for:
 - **Codex CLI** — your ChatGPT Plus/Pro plan (Codex is included; no
   separate API billing unless you choose to add API credits)
 
-No API keys required for either side. This replaces the earlier
-API-billed / browser-automation attempts in `dual-ai-review/` -- keep that
-folder only if you specifically want a fully unattended, headless,
-pay-per-token pipeline (see `dual-ai-review/README.md`).
+No API keys required for either side, no per-token billing.
 
 ## Setup
 
